@@ -86,6 +86,52 @@ function Board({ XIsNext, squares, onPlay }) {
     );
 }
 
+export default function Game() {
+    const [XIsNext, setXIsNext] = useState(true);
+    const [history, setHistory] = useState([Array(9).fill(null)]);
+    const currentSquares = history[history.length - 1];
+
+    function handlePlay(nextSquares) {
+        setHistory([...history, nextSquares]);
+        setXIsNext(!XIsNext);
+    }
+
+    function jumpTo(nextMove) {
+        // TODO
+    }
+
+    const moves = history.map((squares, move) => {
+        let description;
+
+        if (move > 0) {
+            description = "Go to move #" + move;
+        } else {
+            description = "Go to start game";
+        }
+
+        return (
+            <li>
+                <button onClick={() => jumpTo(move)}> {description} </button>
+            </li>
+        );
+    });
+
+    return (
+        <div className="game">
+            <div className="game-board">
+                <Board
+                    XIsNext={XIsNext}
+                    squares={currentSquares}
+                    onPlay={handlePlay}
+                />
+            </div>
+            <div className="game-info">
+                <ol> {moves} </ol>
+            </div>
+        </div>
+    );
+}
+
 function calculateWinner(squares) {
     const lines = [
         [0, 1, 2],
@@ -109,30 +155,6 @@ function calculateWinner(squares) {
             return squares[a];
         }
     }
-}
 
-export default function Game() {
-    const [XIsNext, setXIsNext] = useState(true);
-    const [history, setHistory] = useState([Array(9).fill(null)]);
-    const currentSquares = history[history.length - 1];
-
-    function handlePlay(nextSquares) {
-        setHistory([...history, nextSquares]);
-        setXIsNext(!XIsNext);
-    }
-
-    return (
-        <div className="game">
-            <div className="game-board">
-                <Board
-                    XIsNext={XIsNext}
-                    squares={currentSquares}
-                    onPlay={handlePlay}
-                />
-            </div>
-            <div className="game-info">
-                <ol> {/*TODO*/} </ol>
-            </div>
-        </div>
-    );
+    return null;
 }
